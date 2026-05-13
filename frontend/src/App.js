@@ -10,6 +10,7 @@ function App() {
     theme: ''
   });
 
+  // eslint-disable-next-line no-unused-vars
   const [sessionId, setSessionId] = useState('session_' + Math.random().toString(36).substr(2, 9));
   const [response, setResponse] = useState(null);
   const [loading, setLoading] = useState(false);
