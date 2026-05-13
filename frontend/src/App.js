@@ -16,11 +16,13 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [userReply, setUserReply] = useState('');
 
+  const apiUrl = process.env.NODE_ENV === 'production' ? '/_/backend/api/plan' : 'http://localhost:3001/api/plan';
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const result = await axios.post('http://localhost:3001/api/plan', { 
+      const result = await axios.post(apiUrl, { 
          sessionId,
          formData 
       });
@@ -36,7 +38,7 @@ function App() {
     e.preventDefault();
     setLoading(true);
     try {
-      const result = await axios.post('http://localhost:3001/api/plan', { 
+      const result = await axios.post(apiUrl, {
          sessionId,
          userReply // Sending ONLY the reply to simulate multi-turn memory
       });
