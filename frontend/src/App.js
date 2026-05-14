@@ -16,6 +16,7 @@ import {
   Send, 
   Loader2, 
   ChevronRight,
+  ChevronDown,
   Package,
   ListChecks,
   Navigation
@@ -98,6 +99,7 @@ function App() {
   const [userReply, setUserReply] = useState('');
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [selectedDay, setSelectedDay] = useState(null);
+  const [expandedDays, setExpandedDays] = useState({});
   const [mapCenter, setMapCenter] = useState([48.8566, 2.3522]);
   const responseRef = useRef(null);
 
@@ -172,6 +174,11 @@ function App() {
     setMapCenter(coords);
     setSelectedDay(dayIndex);
     setSelectedLocation(null);
+    // Toggle expanded state
+    setExpandedDays(prev => ({
+      ...prev,
+      [dayIndex]: !prev[dayIndex]
+    }));
   };
 
   // Get all markers for the map
@@ -386,13 +393,20 @@ function App() {
                               <span className="day-number">Day {day.day}</span>
                               <span className="day-date">{day.date}</span>
                             </div>
-                            <div className="day-city">
-                              <MapPin size={14} />
-                              {day.city}
+                            <div className="day-header-right">
+                              <div className="day-city">
+                                <MapPin size={14} />
+                                {day.city}
+                              </div>
+                              <ChevronDown 
+                                size={18} 
+                                className={`expand-icon ${expandedDays[dayIndex] ? 'expanded' : ''}`}
+                              />
                             </div>
                           </div>
                           
-                          <div className="activities-list">
+                          {expandedDays[dayIndex] && (
+                            <div className="activities-list">
                             {day.activities.map((activity, actIdx) => (
                               <div 
                                 key={actIdx} 
@@ -431,6 +445,7 @@ function App() {
                               </div>
                             ))}
                           </div>
+                          )}
                         </div>
                       ))}
                     </div>

@@ -480,6 +480,21 @@ body {
   background: rgba(99, 102, 241, 0.1);
 }
 
+.day-header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.expand-icon {
+  color: var(--text-muted);
+  transition: transform 0.2s ease;
+}
+
+.expand-icon.expanded {
+  transform: rotate(180deg);
+}
+
 .day-info {
   display: flex;
   flex-direction: column;
