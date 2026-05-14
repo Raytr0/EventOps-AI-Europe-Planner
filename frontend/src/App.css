@@ -433,9 +433,7 @@ body {
 .days-list {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  max-height: 600px;
-  overflow-y: auto;
+  gap: 0.75rem;
   padding-right: 0.5rem;
 }
 
@@ -480,6 +478,21 @@ body {
   background: rgba(99, 102, 241, 0.1);
 }
 
+.day-header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.expand-icon {
+  color: var(--text-muted);
+  transition: transform 0.3s ease;
+}
+
+.expand-icon.rotated {
+  transform: rotate(180deg);
+}
+
 .day-info {
   display: flex;
   flex-direction: column;
@@ -508,6 +521,18 @@ body {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 1000px;
+  }
 }
 
 .activity-item {
@@ -810,11 +835,7 @@ body {
     justify-content: center;
   }
 
-  .days-list {
-    max-height: 400px;
-  }
-
-  .map-container {
+.map-container {
     height: 350px;
   }
 }
