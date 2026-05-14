@@ -101,7 +101,8 @@ function App() {
   const [mapCenter, setMapCenter] = useState([48.8566, 2.3522]);
   const responseRef = useRef(null);
 
-  const apiUrl = process.env.NODE_ENV === 'production' ? '/_/backend/api/plan' : 'http://localhost:3001/api/plan';
+  // Use relative URL - works in both v0 sandbox and production (Vercel routes via vercel.json)
+  const apiUrl = '/_/backend/api/plan';
 
   useEffect(() => {
     if (response && responseRef.current) {
