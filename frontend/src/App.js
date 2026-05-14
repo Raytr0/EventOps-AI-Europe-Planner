@@ -16,7 +16,6 @@ import {
   Send, 
   Loader2, 
   ChevronRight,
-  ChevronDown,
   Package,
   ListChecks,
   Navigation
@@ -99,7 +98,6 @@ function App() {
   const [userReply, setUserReply] = useState('');
   const [selectedLocation, setSelectedLocation] = useState(null);
   const [selectedDay, setSelectedDay] = useState(null);
-  const [expandedDay, setExpandedDay] = useState(0);
   const [mapCenter, setMapCenter] = useState([48.8566, 2.3522]);
   const responseRef = useRef(null);
 
@@ -128,7 +126,6 @@ function App() {
         const coords = getCityCoords(result.data.data.data.itinerary[0].city);
         setMapCenter(coords);
         setSelectedDay(0);
-        setExpandedDay(0);
       }
     } catch (error) {
       console.error('Submission failed', error);
@@ -174,8 +171,6 @@ function App() {
     const coords = getCityCoords(day.city);
     setMapCenter(coords);
     setSelectedDay(dayIndex);
-    // Toggle expanded state - if clicking the same day, collapse it; otherwise expand new day
-    setExpandedDay(expandedDay === dayIndex ? null : dayIndex);
     setSelectedLocation(null);
   };
 
@@ -381,7 +376,7 @@ function App() {
                       {response.data.itinerary.map((day, dayIndex) => (
                         <div 
                           key={dayIndex} 
-                          className={`day-card ${selectedDay === dayIndex ? 'active' : ''} ${expandedDay === dayIndex ? 'expanded' : ''}`}
+                          className={`day-card ${selectedDay === dayIndex ? 'active' : ''}`}
                         >
                           <div 
                             className="day-header"
@@ -391,59 +386,51 @@ function App() {
                               <span className="day-number">Day {day.day}</span>
                               <span className="day-date">{day.date}</span>
                             </div>
-                            <div className="day-header-right">
-                              <div className="day-city">
-                                <MapPin size={14} />
-                                {day.city}
-                              </div>
-                              <ChevronDown 
-                                size={18} 
-                                className={`expand-icon ${expandedDay === dayIndex ? 'rotated' : ''}`}
-                              />
+                            <div className="day-city">
+                              <MapPin size={14} />
+                              {day.city}
                             </div>
                           </div>
                           
-                          {expandedDay === dayIndex && (
-                            <div className="activities-list">
-                              {day.activities.map((activity, actIdx) => (
-                                <div 
-                                  key={actIdx} 
-                                  className={`activity-item ${activity.type} ${
-                                    selectedLocation?.dayIndex === dayIndex && 
-                                    selectedLocation?.activityIndex === actIdx ? 'selected' : ''
-                                  }`}
-                                  onClick={() => handleActivityClick(day, dayIndex, activity, actIdx)}
-                                >
-                                  <div className="activity-type">
-                                    {activity.type === 'transit' ? (
-                                      <Navigation size={14} />
-                                    ) : (
-                                      <MapPin size={14} />
-                                    )}
-                                    <span>{activity.type}</span>
-                                  </div>
-                                  <p className="activity-desc">{activity.description}</p>
-                                  <div className="activity-meta">
-                                    <span>
-                                      <Clock size={12} />
-                                      {activity.duration_mins} mins
+                          <div className="activities-list">
+                            {day.activities.map((activity, actIdx) => (
+                              <div 
+                                key={actIdx} 
+                                className={`activity-item ${activity.type} ${
+                                  selectedLocation?.dayIndex === dayIndex && 
+                                  selectedLocation?.activityIndex === actIdx ? 'selected' : ''
+                                }`}
+                                onClick={() => handleActivityClick(day, dayIndex, activity, actIdx)}
+                              >
+                                <div className="activity-type">
+                                  {activity.type === 'transit' ? (
+                                    <Navigation size={14} />
+                                  ) : (
+                                    <MapPin size={14} />
+                                  )}
+                                  <span>{activity.type}</span>
+                                </div>
+                                <p className="activity-desc">{activity.description}</p>
+                                <div className="activity-meta">
+                                  <span>
+                                    <Clock size={12} />
+                                    {activity.duration_mins} mins
+                                  </span>
+                                  {activity.sourceCitation && (
+                                    <span className="source">
+                                      {activity.sourceCitation}
                                     </span>
-                                    {activity.sourceCitation && (
-                                      <span className="source">
-                                        {activity.sourceCitation}
-                                      </span>
-                                    )}
-                                  </div>
-                                  {activity.warnings?.length > 0 && (
-                                    <div className="activity-warning">
-                                      <AlertTriangle size={12} />
-                                      {activity.warnings.join(' ')}
-                                    </div>
                                   )}
                                 </div>
-                              ))}
-                            </div>
-                          )}
+                                {activity.warnings?.length > 0 && (
+                                  <div className="activity-warning">
+                                    <AlertTriangle size={12} />
+                                    {activity.warnings.join(' ')}
+                                  </div>
+                                )}
+                              </div>
+                            ))}
+                          </div>
                         </div>
                       ))}
                     </div>
